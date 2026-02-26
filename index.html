@@ -3,66 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite Supercars | Full-Stack 3D</title>
+    <title>3D Luxury Store | Admin & Wallet</title>
     <style>
-        :root { --p-green: #2ecc71; --dark: #050505; --glass: rgba(255, 255, 255, 0.05); }
-        body { margin: 0; background: var(--dark); color: white; font-family: 'Orbitron', sans-serif; overflow: hidden; }
-        #canvas-container { width: 100vw; height: 100vh; position: relative; }
+        :root { --gold: #d4af37; --dark: #0a0a0a; --glass: rgba(255,255,255,0.03); }
+        body { margin: 0; background: var(--dark); color: white; font-family: 'Orbitron', sans-serif; overflow-x: hidden; }
         
-        /* UI Dizayn */
-        .glass-ui {
-            position: absolute; background: var(--glass);
-            backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px; padding: 25px; z-index: 100;
+        /* Navbar */
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 20px 50px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000;
+            box-sizing: border-box; border-bottom: 1px solid rgba(212, 175, 55, 0.2);
         }
 
-        .side-panel { top: 50%; left: 30px; transform: translateY(-50%); width: 260px; border-left: 4px solid var(--p-green); }
-        .admin-panel { bottom: -450px; left: 50%; transform: translateX(-50%); width: 85%; height: 320px; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); display: flex; gap: 30px; }
-        .admin-panel.active { bottom: 30px; }
+        .user-info { display: flex; align-items: center; gap: 15px; }
+        .balance { color: var(--gold); font-weight: bold; border: 1px solid var(--gold); padding: 5px 15px; border-radius: 20px; }
+        .user-img { width: 35px; height: 35px; border-radius: 50%; border: 1px solid var(--gold); }
 
-        .btn {
-            background: var(--p-green); color: #000; border: none; padding: 12px;
-            border-radius: 8px; cursor: pointer; font-weight: 700; width: 100%;
-            text-transform: uppercase; font-size: 11px; transition: 0.3s; margin-top: 10px;
+        /* Main 3D Stage */
+        #canvas-container { width: 100vw; height: 70vh; margin-top: 80px; }
+
+        /* Store Section */
+        .store-container { padding: 50px; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        .card {
+            background: var(--glass); border: 1px solid rgba(255,255,255,0.1);
+            padding: 20px; border-radius: 15px; text-align: center; transition: 0.3s;
         }
-        .btn:hover { box-shadow: 0 0 20px var(--p-green); transform: translateY(-2px); }
+        .card:hover { transform: translateY(-10px); border-color: var(--gold); box-shadow: 0 10px 30px rgba(212,175,55,0.1); }
+        .price { font-size: 24px; color: var(--gold); margin: 15px 0; }
 
-        h2 { margin: 0 0 10px 0; font-size: 20px; color: var(--p-green); }
-        .stat { font-size: 12px; color: #aaa; margin-bottom: 5px; }
-        input { background: #000; color: var(--p-green); border: 1px solid #333; padding: 8px; width: 90%; margin-bottom: 5px; border-radius: 4px; }
-        .admin-toggle { position: absolute; bottom: 30px; right: 30px; z-index: 101; cursor: pointer; font-size: 24px; }
+        /* Buttons */
+        .btn-gold {
+            background: var(--gold); color: black; border: none; padding: 12px 25px;
+            border-radius: 5px; cursor: pointer; font-weight: bold; text-transform: uppercase; width: 100%;
+        }
+        .btn-login { background: white; color: black; padding: 8px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+
+        /* Admin Panel Modal */
+        #admin-modal {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+            z-index: 2000; padding: 50px;
+        }
+        .admin-form { max-width: 500px; margin: auto; background: #111; padding: 30px; border-radius: 15px; border: 1px solid var(--gold); }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; background: #000; border: 1px solid #333; color: white; border-radius: 5px; box-sizing: border-box; }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div id="canvas-container">
-        <div class="glass-ui side-panel">
-            <h2 id="display-name">YUKLANMOQDA...</h2>
-            <div class="stat">POWER: <span id="display-power" style="color:white">---</span></div>
-            <div class="stat">SPEED: <span id="display-speed" style="color:white">---</span></div>
-            <hr style="border: 0.5px solid #222; margin: 15px 0;">
-            <button class="btn" onclick="window.loadNextCar()">KEYINGI MODEL ➔</button>
+    <nav>
+        <div style="font-size: 20px; font-weight: bold; color: var(--gold);">LUXE 3D STORE</div>
+        <div id="auth-section">
+            <button class="btn-login" onclick="loginWithGoogle()">GOOGLE BILAN KIRISH</button>
+        </div>
+        <div id="user-section" class="user-info" style="display: none;">
+            <div class="balance" onclick="topUpBalance()">HAMYON: <span id="user-balance">0</span> $</div>
+            <img id="user-pfp" class="user-img" src="" alt="">
+            <button id="admin-btn" style="display:none;" onclick="showAdmin()">ADMIN</button>
+        </div>
+    </nav>
+
+    <div id="canvas-container"></div>
+
+    <div class="store-container" id="product-list">
         </div>
 
-        <div class="admin-toggle" onclick="document.getElementById('adminPanel').classList.toggle('active')">⚙️</div>
-
-        <div class="glass-ui admin-panel" id="adminPanel">
-            <div style="flex: 1;">
-                <h3 style="color: var(--p-green); margin-top: 0;">YANGI MASHINA</h3>
-                <input type="text" id="db-name" placeholder="Nomi (Lambo...)">
-                <input type="text" id="db-url" placeholder="Fayl nomi (.glb)">
-                <input type="text" id="db-power" placeholder="Ot kuchi (800 HP)">
-                <input type="text" id="db-speed" placeholder="Tezlik (350 KM/H)">
-                <button class="btn" onclick="window.saveToFirebase()">BAZAGA SAQLASH</button>
-            </div>
-            <div style="flex: 1; border-left: 1px solid #333; padding-left: 25px;">
-                <h3 style="color: var(--p-green); margin-top: 0;">SAHNA SOZLAMALARI</h3>
-                <label style="font-size: 12px;">CHIROQ KUCHI</label>
-                <input type="range" min="0" max="200" value="100" oninput="window.updateLight(this.value)">
-                <label style="display:block; margin-top:10px;"><input type="checkbox" checked onchange="window.controls.autoRotate = this.checked"> AUTO-ROTATE</label>
-                <p style="font-size: 10px; color: #555; margin-top: 20px;">FIREBASE STATUS: CONNECTED ✓</p>
-            </div>
+    <div id="admin-modal">
+        <div class="admin-form">
+            <h2>YANGI MAHSULOT</h2>
+            <input type="text" id="p-name" placeholder="Mahsulot nomi">
+            <input type="text" id="p-price" placeholder="Narxi ($)">
+            <input type="text" id="p-model" placeholder="3D Model Linki (.glb)">
+            <button class="btn-gold" onclick="addProduct()">BAZAGA QO'SHISH</button>
+            <button class="btn-gold" style="background:#333; color:white; margin-top:10px;" onclick="closeAdmin()">YOPISH</button>
         </div>
     </div>
 
@@ -77,125 +90,126 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import * as THREE from 'three';
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-        // ==========================================================
-        // 1. DIQQAT! NUSXALAGAN KODINGIZNI SHU YERGA QO'YING:
+        // 1. Firebase Config (O'zingiznikini qo'ying)
         const firebaseConfig = {
-            apiKey: "AIzaSyD2ZyeDAT517538fSljJ581d9yohZ3Td1c", 
-            authDomain: "portfolio-f332d.firebaseapp.com",
-            projectId: "portfolio-f332d",
-            storageBucket: "portfolio-f332d.firebasestorage.app",
-            messagingSenderId: "327196596703",
-            appId: "1:327196596703:web:c8e7bafc0f18bf71b3cc6a"
+            apiKey: "AIzaSyD2ZyeDAT517538fSljJ581d9yohZ3Td1c", authDomain: "portfolio-f332d.firebaseapp.com", projectId: "portfolio-f332d", storageBucket: "portfolio-f332d.firebasestorage.app", messagingSenderId: "327196596703", appId: "1:327196596703:web:c8e7bafc0f18bf71b3cc6a"
         };
-        // ==========================================================
 
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
 
-        let scene, camera, renderer, controls, carModel, neonLight;
-        let dbCars = [];
-        let currentIndex = 0;
+        let scene, camera, renderer, controls, carModel;
 
-        async function init() {
+        // --- AUTH MANTIQI ---
+        window.loginWithGoogle = () => {
+            signInWithPopup(auth, provider).then(async (result) => {
+                const user = result.user;
+                // Foydalanuvchini bazada tekshirish/yaratish
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+                if (!userSnap.exists()) {
+                    await setDoc(userRef, { name: user.displayName, balance: 0, role: 'user' });
+                }
+                location.reload();
+            });
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                document.getElementById('auth-section').style.display = 'none';
+                document.getElementById('user-section').style.display = 'flex';
+                document.getElementById('user-pfp').src = user.photoURL;
+                
+                const userSnap = await getDoc(doc(db, "users", user.uid));
+                const userData = userSnap.data();
+                document.getElementById('user-balance').innerText = userData.balance;
+                
+                if(userData.role === 'admin') document.getElementById('admin-btn').style.display = 'block';
+            }
+        });
+
+        // --- 3D SAHNA ---
+        function init3D() {
             scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2(0x000000, 0.08);
-
-            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(-6, 3, 8);
-
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
-            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / (window.innerHeight*0.7), 0.1, 1000);
+            camera.position.set(5, 2, 8);
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight * 0.7);
             document.getElementById('canvas-container').appendChild(renderer.domElement);
+            
+            scene.add(new THREE.AmbientLight(0xffffff, 1));
+            const pointLight = new THREE.PointLight(0xd4af37, 50);
+            pointLight.position.set(5, 5, 5);
+            scene.add(pointLight);
 
-            neonLight = new THREE.SpotLight(0x2ecc71, 150);
-            neonLight.position.set(5, 10, 5);
-            scene.add(neonLight);
-            scene.add(new THREE.AmbientLight(0xffffff, 0.2));
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.autoRotate = true;
 
-            const grid = new THREE.GridHelper(50, 50, 0x2ecc71, 0x050505);
-            grid.position.y = -1.2;
-            scene.add(grid);
-
-            window.controls = new OrbitControls(camera, renderer.domElement);
-            window.controls.enableDamping = true;
-            window.controls.autoRotate = true;
-
-            await fetchFromFirebase();
+            loadModel('free__lamborghini_terzo_millennio.glb'); // Asosiy model
             animate();
         }
 
-        async function fetchFromFirebase() {
-            try {
-                const querySnapshot = await getDocs(collection(db, "cars"));
-                dbCars = querySnapshot.docs.map(doc => doc.data());
-                if(dbCars.length > 0) displayCar(0);
-                else {
-                    document.getElementById('display-name').innerText = "BAZA BO'SH";
-                }
-            } catch (e) { console.error("Firebase Xatosi:", e); }
-        }
-
-        function displayCar(index) {
-            const data = dbCars[index];
-            document.getElementById('display-name').innerText = data.name;
-            document.getElementById('display-power').innerText = data.power || "N/A";
-            document.getElementById('display-speed').innerText = data.speed || "N/A";
-            
-            if(carModel) scene.remove(carModel);
+        function loadModel(path) {
             const loader = new GLTFLoader();
-            loader.load(data.modelUrl, (gltf) => {
+            loader.load(path, (gltf) => {
+                if(carModel) scene.remove(carModel);
                 carModel = gltf.scene;
-                carModel.traverse(n => {
-                    if(n.isMesh && n.name.toLowerCase().includes('body')) {
-                        n.material.color.set(0x013220);
-                    }
-                });
-                carModel.scale.set(3, 3, 3);
-                carModel.position.y = -1.2;
+                carModel.scale.set(2.5, 2.5, 2.5);
                 scene.add(carModel);
             });
         }
 
-        window.saveToFirebase = async () => {
-            const newCar = {
-                name: document.getElementById('db-name').value,
-                modelUrl: document.getElementById('db-url').value,
-                power: document.getElementById('db-power').value,
-                speed: document.getElementById('db-speed').value
-            };
-            await addDoc(collection(db, "cars"), newCar);
-            alert("Saqlandi!");
-            fetchFromFirebase();
-        };
-
-        window.loadNextCar = () => {
-            if(dbCars.length === 0) return;
-            currentIndex = (currentIndex + 1) % dbCars.length;
-            displayCar(currentIndex);
-        };
-
-        window.updateLight = (v) => { neonLight.intensity = v; };
-
         function animate() {
             requestAnimationFrame(animate);
-            window.controls.update();
+            controls.update();
             renderer.render(scene, camera);
         }
 
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
+        // --- DO'KON MANTIQI ---
+        async function fetchProducts() {
+            const querySnapshot = await getDocs(collection(db, "products"));
+            const list = document.getElementById('product-list');
+            list.innerHTML = "";
+            querySnapshot.forEach((doc) => {
+                const p = doc.data();
+                list.innerHTML += `
+                    <div class="card">
+                        <h3>${p.name}</h3>
+                        <div class="price">${p.price} $</div>
+                        <button class="btn-gold" onclick="buyProduct('${doc.id}', ${p.price})">SOTIB OLISH</button>
+                    </div>
+                `;
+            });
+        }
 
-        init();
+        window.addProduct = async () => {
+            const p = {
+                name: document.getElementById('p-name').value,
+                price: Number(document.getElementById('p-price').value),
+                modelUrl: document.getElementById('p-model').value
+            };
+            await addDoc(collection(db, "products"), p);
+            alert("Mahsulot qo'shildi!");
+            location.reload();
+        };
+
+        window.topUpBalance = () => {
+            alert("Hamyonni to'ldirish uchun @admin_telegram ga yozing (Hozircha demo rejim)");
+        };
+
+        window.showAdmin = () => document.getElementById('admin-modal').style.display = 'block';
+        window.closeAdmin = () => document.getElementById('admin-modal').style.display = 'none';
+
+        init3D();
+        fetchProducts();
     </script>
 </body>
 </html>
