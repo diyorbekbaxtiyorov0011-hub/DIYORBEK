@@ -3,34 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal 3D Portfolio | Lamborghini</title>
+    <title>Lamborghini Terzo Millennio 3D</title>
     <style>
-        body { margin: 0; background: radial-gradient(circle, #111 0%, #000 100%); overflow: hidden; font-family: 'Segoe UI', sans-serif; color: #fff; }
-        #canvas-container { width: 100vw; height: 100vh; position: relative; }
+        body { margin: 0; background-color: #000; overflow: hidden; font-family: 'Courier New', monospace; }
+        #canvas-container { width: 100vw; height: 100vh; }
         
-        /* IT-style UI elements */
-        .ui-element {
-            position: absolute; color: #2ecc71; text-transform: uppercase; letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(46, 204, 113, 0.5); pointer-events: none;
+        /* IT uslubidagi interfeys */
+        .ui-panel {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            color: #2ecc71;
+            z-index: 10;
+            pointer-events: none;
+            border-left: 2px solid #2ecc71;
+            padding-left: 15px;
         }
-        
-        .header { top: 30px; left: 30px; font-size: 14px; }
-        .main-title { top: 15%; width: 100%; text-align: center; font-size: 28px; font-weight: 100; color: #fff; }
-        .tagline { top: 22%; width: 100%; text-align: center; font-size: 12px; color: #aaa; letter-spacing: 5px; }
-        .info-panel { bottom: 30px; width: 100%; text-align: center; font-size: 10px; color: #555; }
-        .interactive-icon { bottom: 100px; left: 50%; transform: translateX(-50%); color: #2ecc71; font-size: 24px; animation: pulse 2s infinite; }
 
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        h1 { margin: 0; font-size: 24px; letter-spacing: 4px; text-transform: uppercase; }
+        .status { font-size: 10px; color: #155e33; margin-top: 5px; }
     </style>
 </head>
 <body>
 
-    <div id="canvas-container">
-        <div class="ui-element header">MENING PORTFOLIO</div>
-        <div class="main-title">UZIMNING FOYDALANISHIM UCHUN 3D SAYT</div>
-        <div class="tagline">INTERAKTIV 3D LAMBORGHINI TAJRIBASI</div>
-        <div class="ui-element interactive-icon">🖰 ↕</div> <div class="info-panel">LAMBORGHINI 3D INTERACTIVE | DARK GREEN</div>
+    <div class="ui-panel">
+        <h1>Terzo Millennio</h1>
+        <div class="status">SYSTEM: ONLINE | MODEL: LOADED</div>
     </div>
+
+    <div id="canvas-container"></div>
 
     <script type="importmap">
         {
@@ -46,101 +47,62 @@
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-        // 1. Sahna va Kamera sozlamalari
+        // 1. Sahna sozlamalari
         const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x000000, 0.1); // Subtle fog for depth
+        scene.background = new THREE.Color(0x000000);
 
-        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(-5, 3, 7); // Initial nice perspective
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(5, 2, 8);
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.0;
+        renderer.toneMapping = THREE.ReinhardToneMapping;
         document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-        // 2. Chiroqlar (Yashil neon effektlari)
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
+        // 2. Chiroqlar (Mashina yaltirashi uchun)
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
         scene.add(ambientLight);
 
-        const greenSpotlight = new THREE.SpotLight(0x2ecc71, 100); // Key green light
-        greenSpotlight.position.set(5, 5, 5);
-        greenSpotlight.angle = Math.PI / 6;
-        scene.add(greenSpotlight);
+        const greenLight = new THREE.DirectionalLight(0x2ecc71, 2);
+        greenLight.position.set(5, 5, 5);
+        scene.add(greenLight);
 
-        const fillLight = new THREE.PointLight(0xffffff, 20); // White fill
-        fillLight.position.set(-5, 2, -2);
-        scene.add(fillLight);
+        const topLight = new THREE.PointLight(0xffffff, 10);
+        topLight.position.set(0, 10, 0);
+        scene.add(topLight);
 
-        // 3. Lamborghini Modelini yuklash
+        // 3. Lamborghini Terzo Millennio faylini yuklash
         const loader = new GLTFLoader();
-        // Ochiq manbali Lamborghini Aventador GLB modeli (CDN)
-        const modelPath = 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/models/gltf/DamagedHelmet.glb'; 
-        // Izoh: Men vaqtincha damaged helmet modelini ishlatdim, lekin pastdagi traverse funksiyasi 
-        // uni To'q Yashil (dark green) rangga bo'yaydi va interaktivlikni ko'rsatadi. 
-        // Sizda Lamborghini GLB fayli bo'lsa, havolani almashtirishingiz mumkin.
-
-        loader.load(modelPath, (gltf) => {
+        
+        // FAYL NOMI SHU YERDA:
+        loader.load('free__lamborghini_terzo_millennio.glb', (gltf) => {
             const car = gltf.scene;
             
             car.traverse((node) => {
                 if (node.isMesh) {
-                    // Korpustni aniqlab, to'q yashil (emerald) rang berish
-                    // Biz korpusga mos keladigan mesh nomini topishga harakat qilamiz
-                    if (node.name.toLowerCase().includes('body') || node.name.toLowerCase().includes('paint') || node.name === 'Mesh_001_1') {
+                    // Mashina korpusini (Body) to'q yashil qilish
+                    if (node.name.toLowerCase().includes('body') || node.name.toLowerCase().includes('car')) {
                         node.material = new THREE.MeshStandardMaterial({
-                            color: 0x013220, // To'q yam-yashil (Dark Emerald Green)
+                            color: 0x013220, // To'q yashil (Sal qora aralash)
                             metalness: 1.0,
-                            roughness: 0.2,
-                            envMapIntensity: 1.2
-                        });
-                    } else if (node.name.toLowerCase().includes('glass')) {
-                        node.material = new THREE.MeshStandardMaterial({
-                            color: 0x000000,
-                            metalness: 1.0,
-                            roughness: 0.0,
-                            transparent: true,
-                            opacity: 0.7
+                            roughness: 0.1
                         });
                     }
                 }
             });
 
-            car.scale.set(3, 3, 3); // Scaled up
-            car.position.set(0, -1, 0); // Grounded
+            // Mashinani markazlashtirish
+            car.position.set(0, 0, 0);
             scene.add(car);
-        }, 
-        (xhr) => { console.log((xhr.loaded / xhr.total * 100) + '% yuklandi'); },
-        (error) => { console.error('Modelni yuklashda xatolik:', error); });
-
-        // 4. Atrof-muhit: Grid helper va Polygonal Floor
-        const gridHelper = new THREE.GridHelper(20, 40, 0x111111, 0x052e16); // Subtle green grid
-        gridHelper.position.y = -1.01;
-        scene.add(gridHelper);
-
-        // 5. Nazorat (Interaktivlik)
-        const controls = new OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true; // Smooth motion
-        controls.maxDistance = 15;
-        controls.minDistance = 2;
-        controls.autoRotate = true; // Slower auto rotate
-        controls.autoRotateSpeed = 0.5;
-
-        // 6. Animatsiya sikli
-        function animate() {
-            requestAnimationFrame(animate);
-            controls.update(); // Required for damping
-            renderer.render(scene, camera);
-        }
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+        }, undefined, (error) => {
+            console.error('Model yuklanmadi! Fayl nomi to\'g\'riligini tekshiring.', error);
         });
 
-        animate();
-    </script>
-</body>
-</html>
+        // 4. Atrofga yashil chiziqlar (Grid)
+        const grid = new THREE.GridHelper(20, 40, 0x052e16, 0x021a0d);
+        grid.position.y = -0.5;
+        scene.add(grid);
+
+        // 5. Boshqaruv
+        const controls = new OrbitControls(camera,
