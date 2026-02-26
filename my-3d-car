@@ -26,7 +26,7 @@
 <body>
 
     <div id="canvas-container">
-        <div class="ui-element header">MENING PORTFOLIO</div>
+        <div class="ui-element header">MENING PORTFOLIOM</div>
         <div class="main-title">UZIMNING FOYDALANISHIM UCHUN 3D SAYT</div>
         <div class="tagline">INTERAKTIV 3D LAMBORGHINI TAJRIBASI</div>
         <div class="ui-element interactive-icon">🖰 ↕</div> <div class="info-panel">LAMBORGHINI 3D INTERACTIVE | DARK GREEN</div>
