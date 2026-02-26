@@ -122,19 +122,21 @@
             });
         };
 
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                document.getElementById('auth-section').style.display = 'none';
-                document.getElementById('user-section').style.display = 'flex';
-                document.getElementById('user-pfp').src = user.photoURL;
-                
-                const userSnap = await getDoc(doc(db, "users", user.uid));
-                const userData = userSnap.data();
-                document.getElementById('user-balance').innerText = userData.balance;
-                
-                if(userData.role === 'admin') document.getElementById('admin-btn').style.display = 'block';
-            }
-        });
+      onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        document.getElementById('auth-section').style.display = 'none';
+        document.getElementById('user-section').style.display = 'flex';
+        document.getElementById('user-pfp').src = user.photoURL;
+        
+        // MAHSUS QATOR: Hozircha hamma kirgan odam admin bo'lsin
+        document.getElementById('admin-btn').style.display = 'block'; 
+        
+        const userSnap = await getDoc(doc(db, "users", user.uid));
+        if (userSnap.exists()) {
+            document.getElementById('user-balance').innerText = userSnap.data().balance;
+        }
+    }
+});
 
         // --- 3D SAHNA ---
         function init3D() {
