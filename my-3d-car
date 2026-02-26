@@ -76,7 +76,7 @@
         // 3. Lamborghini Modelini yuklash
         const loader = new GLTFLoader();
         // Ochiq manbali Lamborghini Aventador GLB modeli (CDN)
-        const modelPath = 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/models/gltf/DamagedHelmet.glb'; 
+        const modelPath = 'free__lamborghini_terzo_millennio.glb'; 
         // Izoh: Men vaqtincha damaged helmet modelini ishlatdim, lekin pastdagi traverse funksiyasi 
         // uni To'q Yashil (dark green) rangga bo'yaydi va interaktivlikni ko'rsatadi. 
         // Sizda Lamborghini GLB fayli bo'lsa, havolani almashtirishingiz mumkin.
