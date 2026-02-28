@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lamborghini | Private Space</title>
+    <title>Lamborghini Admin Space</title>
     <style>
         :root {
             --neon-green: #00ff7f;
-            --dark-green: #0a210f;
-            --black: #050505;
+            --dark-bg: #050505;
         }
 
         body, html {
@@ -16,71 +15,74 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, var(--dark-green) 0%, var(--black) 100%);
-            font-family: 'Courier New', Courier, monospace;
-            color: white;
-            overflow: hidden;
+            background: radial-gradient(circle, #0a210f 0%, var(--dark-bg) 100%);
             display: flex;
             justify-content: center;
             align-items: center;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            color: white;
         }
 
-        /* Asosiy Sahifa */
+        /* Asosiy konteyner */
         #main-page {
             text-align: center;
-            transition: 1s;
+            z-index: 1;
         }
 
+        /* Lamborghini rasmi - SIFATLI VA ISHONCHLI LINK */
         .car-image {
-            width: 80%;
-            max-width: 800px;
-            filter: drop-shadow(0 0 30px rgba(0, 255, 127, 0.2));
+            width: 85%;
+            max-width: 900px;
+            /* Rasm yuklanayotganda soya berib turadi */
+            filter: drop-shadow(0 0 30px rgba(0, 255, 127, 0.3));
             cursor: pointer;
-            transition: 0.5s;
+            transition: transform 0.4s ease, filter 0.4s ease;
+            -webkit-user-drag: none;
         }
 
-        .car-image:active {
-            transform: scale(0.95);
+        .car-image:hover {
+            transform: scale(1.02) translateY(-10px);
+            filter: drop-shadow(0 0 60px rgba(0, 255, 127, 0.5));
         }
 
-        /* Admin Panel (Dastlab yashirin) */
-        #admin-panel {
+        /* Admin Login Formasi */
+        #login-screen {
             display: none;
-            width: 80%;
-            max-width: 600px;
-            background: rgba(0, 0, 0, 0.9);
-            border: 1px solid var(--neon-green);
-            padding: 30px;
-            box-shadow: 0 0 20px var(--neon-green);
-            text-align: left;
-        }
-
-        .terminal-text {
-            color: var(--neon-green);
-            margin-bottom: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 40px;
+            border: 2px solid var(--neon-green);
+            box-shadow: 0 0 30px var(--neon-green);
+            text-align: center;
+            border-radius: 10px;
         }
 
         input {
             background: transparent;
             border: none;
             border-bottom: 2px solid var(--neon-green);
-            color: white;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 1.2rem;
+            color: var(--neon-green);
+            padding: 10px;
+            font-size: 1.5rem;
             outline: none;
-            width: 100%;
-            margin-top: 10px;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
-        .hidden { display: none; }
+        /* Admin Panel */
+        #admin-panel {
+            display: none;
+            width: 70%;
+            border-left: 5px solid var(--neon-green);
+            background: rgba(10, 33, 15, 0.9);
+            padding: 20px;
+        }
 
-        /* Tugma uslubi */
         .btn {
-            margin-top: 20px;
-            padding: 10px 20px;
+            background: transparent;
             border: 1px solid var(--neon-green);
             color: var(--neon-green);
-            background: transparent;
+            padding: 10px 25px;
             cursor: pointer;
             text-transform: uppercase;
         }
@@ -89,30 +91,33 @@
             background: var(--neon-green);
             color: black;
         }
+
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
     <div id="main-page">
-        <img src="https://images.purexbox.com/394c50257e841/1280x720.jpg" 
-             alt="Lambo" class="car-image" id="secret-trigger">
-        <p style="opacity: 0.3; font-size: 0.8rem; margin-top: 20px;">[ System Encrypted ]</p>
+        <img src="https://www.pngplay.com/wp-content/uploads/13/Lamborghini-Aventador-Transparent-Background.png" 
+             alt="Lamborghini Aventador" 
+             class="car-image" 
+             id="secret-trigger">
+        <h2 style="letter-spacing: 10px; opacity: 0.5; margin-top: 30px;">AVENTADOR</h2>
     </div>
 
-    <div id="login-screen" class="hidden" style="text-align: center;">
-        <div class="terminal-text">ROOT ACCESS REQUIRED:</div>
-        <input type="password" id="pass-input" placeholder="Password..." autofocus>
+    <div id="login-screen">
+        <h3 style="color: var(--neon-green);">SYSTEM SECURITY</h3>
+        <input type="password" id="pass-input" placeholder="Enter Root Key" autofocus>
         <br>
-        <button class="btn" onclick="checkPass()">Login</button>
+        <button class="btn" onclick="checkPass()">Access</button>
     </div>
 
     <div id="admin-panel">
-        <div class="terminal-text">>>> Welcome, Admin.</div>
-        <div class="terminal-text">>>> System Status: Online</div>
-        <div class="terminal-text">>>> Database: Connected</div>
-        <hr style="border: 0.5px solid #333;">
-        <p>Bu yerda siz o'z ma'lumotlaringizni boshqarishingiz mumkin.</p>
-        <button class="btn" onclick="location.reload()">Log Out</button>
+        <h2 style="color: var(--neon-green);">[ ADMIN CONSOLE ]</h2>
+        <p>>>> User: Admin</p>
+        <p>>>> Status: Full Access</p>
+        <hr>
+        <button class="btn" onclick="location.reload()">System Exit</button>
     </div>
 
     <script>
@@ -122,36 +127,31 @@
         const adminPanel = document.getElementById('admin-panel');
         const passInput = document.getElementById('pass-input');
 
-        // Maxfiy yo'l: Mashinani ustiga 3 marta tez bossangiz login chiqadi
+        // MAXFIY YO'L: Mashinani ustiga 3 marta tez-tez bosing
         let clicks = 0;
         trigger.addEventListener('click', () => {
             clicks++;
             if (clicks === 3) {
                 mainPage.classList.add('hidden');
-                loginScreen.classList.remove('hidden');
+                loginScreen.style.display = 'block';
                 passInput.focus();
             }
-            setTimeout(() => { clicks = 0; }, 2000); // 2 soniyada bosmasangiz hisob nolga tushadi
+            setTimeout(() => { clicks = 0; }, 1500);
         });
 
-        // Parolni tekshirish
+        // Parol funksiyasi
         function checkPass() {
-            const myPass = "7777"; // SHU YERGA O'Z PAROLINGIZNI YOZING
-            if (passInput.value === myPass) {
+            if (passInput.value === "7777") { // Parolingiz: 7777
                 loginScreen.classList.add('hidden');
                 adminPanel.style.display = 'block';
             } else {
-                alert("ACCESS DENIED!");
+                alert("INTRUDER ALERT!");
                 location.reload();
             }
         }
-
-        // Enter tugmasini bosganda kirish
-        passInput.addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                checkPass();
-            }
-        });
+        
+        // Enter bossa kirish
+        passInput.addEventListener("keypress", (e) => { if (e.key === "Enter") checkPass(); });
     </script>
 </body>
 </html>
