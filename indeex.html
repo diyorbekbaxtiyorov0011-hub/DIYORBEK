@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lamborghini | Private Space</title>
+    <style>
+        :root {
+            --neon-green: #00ff7f;
+            --dark-green: #0a210f;
+            --black: #050505;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, var(--dark-green) 0%, var(--black) 100%);
+            font-family: 'Courier New', Courier, monospace;
+            color: white;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Asosiy Sahifa */
+        #main-page {
+            text-align: center;
+            transition: 1s;
+        }
+
+        .car-image {
+            width: 80%;
+            max-width: 800px;
+            filter: drop-shadow(0 0 30px rgba(0, 255, 127, 0.2));
+            cursor: pointer;
+            transition: 0.5s;
+        }
+
+        .car-image:active {
+            transform: scale(0.95);
+        }
+
+        /* Admin Panel (Dastlab yashirin) */
+        #admin-panel {
+            display: none;
+            width: 80%;
+            max-width: 600px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid var(--neon-green);
+            padding: 30px;
+            box-shadow: 0 0 20px var(--neon-green);
+            text-align: left;
+        }
+
+        .terminal-text {
+            color: var(--neon-green);
+            margin-bottom: 10px;
+        }
+
+        input {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--neon-green);
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.2rem;
+            outline: none;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .hidden { display: none; }
+
+        /* Tugma uslubi */
+        .btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            background: transparent;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .btn:hover {
+            background: var(--neon-green);
+            color: black;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="main-page">
+        <img src="https://images.purexbox.com/394c50257e841/1280x720.jpg" 
+             alt="Lambo" class="car-image" id="secret-trigger">
+        <p style="opacity: 0.3; font-size: 0.8rem; margin-top: 20px;">[ System Encrypted ]</p>
+    </div>
+
+    <div id="login-screen" class="hidden" style="text-align: center;">
+        <div class="terminal-text">ROOT ACCESS REQUIRED:</div>
+        <input type="password" id="pass-input" placeholder="Password..." autofocus>
+        <br>
+        <button class="btn" onclick="checkPass()">Login</button>
+    </div>
+
+    <div id="admin-panel">
+        <div class="terminal-text">>>> Welcome, Admin.</div>
+        <div class="terminal-text">>>> System Status: Online</div>
+        <div class="terminal-text">>>> Database: Connected</div>
+        <hr style="border: 0.5px solid #333;">
+        <p>Bu yerda siz o'z ma'lumotlaringizni boshqarishingiz mumkin.</p>
+        <button class="btn" onclick="location.reload()">Log Out</button>
+    </div>
+
+    <script>
+        const trigger = document.getElementById('secret-trigger');
+        const mainPage = document.getElementById('main-page');
+        const loginScreen = document.getElementById('login-screen');
+        const adminPanel = document.getElementById('admin-panel');
+        const passInput = document.getElementById('pass-input');
+
+        // Maxfiy yo'l: Mashinani ustiga 3 marta tez bossangiz login chiqadi
+        let clicks = 0;
+        trigger.addEventListener('click', () => {
+            clicks++;
+            if (clicks === 3) {
+                mainPage.classList.add('hidden');
+                loginScreen.classList.remove('hidden');
+                passInput.focus();
+            }
+            setTimeout(() => { clicks = 0; }, 2000); // 2 soniyada bosmasangiz hisob nolga tushadi
+        });
+
+        // Parolni tekshirish
+        function checkPass() {
+            const myPass = "7777"; // SHU YERGA O'Z PAROLINGIZNI YOZING
+            if (passInput.value === myPass) {
+                loginScreen.classList.add('hidden');
+                adminPanel.style.display = 'block';
+            } else {
+                alert("ACCESS DENIED!");
+                location.reload();
+            }
+        }
+
+        // Enter tugmasini bosganda kirish
+        passInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                checkPass();
+            }
+        });
+    </script>
+</body>
+</html>
